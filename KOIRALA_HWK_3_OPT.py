@@ -55,7 +55,7 @@ model.OBJ = Objective(rule=obj_expression)
 
 # supply/demand match constraint
 def match_const(model, i):
-    return model.solar[i]*model.cap['s_cap'] + model.ESS_d[i] - model.ESS_c[i] - model.curt[i] - demand == 0   
+    return model.solar[i]*model.cap['s_cap'] + model.wind[i]*model.cap['w_cap'] + model.ESS_d[i] - model.ESS_c[i] - model.curt[i] - model.demand[i] == 0   
 model.match = Constraint(model.t, rule = match_const)
 
 # ESS charge/discharge constraint
@@ -94,7 +94,7 @@ status = opt.solve(model)
 
 # write model outputs to a JSON file
 model.solutions.store_to(status)
-status.write(filename='solar_storage.json', format='json')
+status.write(filename='solarwind_storage.json', format='json')
 
 # pyomo solve solar_storage_model.py --solver=glpk
 # pyomo solve solar_storage_model.py --solver=gurobi
